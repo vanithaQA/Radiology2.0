@@ -1,0 +1,734 @@
+package com.Radiologymammogram;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+/**
+ * @author vnampel1
+ *
+ */
+public class UltrasoundGuestcheckout {
+	WebDriver driver;
+	By dropdown = By.xpath("//*[@id='navbar']/div[2]/div/div/div[1]/button");
+	//private static Logger logger = LogManager.getLogger(MammogramLogin.class);
+
+	public UltrasoundGuestcheckout(WebDriver driver) {
+		this.driver=driver;
+	}
+
+	//Select the who's scheduling for the DropDown
+	public void whoschedulingfor() {
+
+		Select sel = new Select (driver.findElement(By.xpath("//select[@id='SchedulingFor']")));
+		sel.selectByVisibleText("Myself");
+
+	}
+	//Select the Type of radiology DropDown 
+	public void Typeofultrasoundappt() {
+		Select sel = new Select (driver.findElement(By.xpath("//select[@id='SelectedExamType']")));
+		sel.selectByVisibleText("Ultrasound");
+		//logger.info("Mammography option selected");
+
+	}
+	//Select the type of service DropDown 
+	public void Typeofservice() throws InterruptedException {
+		Thread.sleep(3000);
+		Select sel = new Select (driver.findElement(By.xpath("//select[@id='SelectedService']")));
+		sel.selectByVisibleText("Ultrasound Bladder");
+		//logger.info("Mammo -screening digital option selected successfully");
+	}
+
+	//Yes for order
+	public void order() {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement order=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//body/div[@id='UH-MainMenu']/div[3]/main[1]/div[3]/div[3]/div[1]/div[1]/div[1]/div[1]/form[1]/div[4]/div[1]/div[1]/label[1]")));
+		js.executeScript("arguments[0].click()", order);
+	}
+
+	//Select the No for under 18 of age 
+	public void Clickageband () {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+		WebElement age=	driver.findElement(By.xpath("//*[@id=\"confirm-question3\"]/div/div[2]/label"));
+		js.executeScript("arguments[0].click()", age);
+		//logger.info("Selected No for under 18 of age band");
+
+		WebElement search=driver.findElement(By.xpath("//*[@id=\"UH-MainMenu\"]/div[3]/main/div[3]/div[3]/div/div/div/div/form/div[8]/a"));
+		js.executeScript("arguments[0].click()", search);
+		//logger.info("Click on the search button");
+
+	}
+	//Click on the SeeMoretimes button
+	public void Seemoretimes() {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+
+		WebElement seemorebutton = driver.findElement(By.xpath("//*[@id=\"UH-Feature-Locations-FindALocation-Results\"]/div[1]/div[2]/div[3]/div/a"));
+		js.executeScript("arguments[0].click()", seemorebutton);
+		//logger.info("Click on the seemoretimeslots option");
+
+
+		WebElement element = driver.findElement(By.xpath("//body/div[@id='UH-MainMenu']/div[3]/main[1]/div[3]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]"));
+		js.executeScript("arguments[0].click()", element);
+		//logger.info("selected the available time slots");
+
+
+
+		try {
+			WebElement ele1= driver.findElement(By.xpath("//body/div[@id='UH-MainMenu']/div[3]/main[1]/div[3]/div[1]/div[1]/div[1]/div[2]/div[1]/div[2]"));
+			if(ele1.isDisplayed()) {
+				ele1.click();
+			}
+
+			else{
+
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		//Click on the Select this time button
+		WebElement selecttime=driver.findElement(By.xpath("//*[(text()='Select This Time')]"));
+		js.executeScript("arguments[0].click()", selecttime);
+	}
+
+	//Click on the BookNow button
+	public void checkoutasguest() throws InterruptedException {
+		//JavascriptExecutor js=(JavascriptExecutor)driver;
+		try {
+			//Thread.sleep(2000);
+			WebDriverWait wait = new WebDriverWait(driver, 15);
+			WebElement booknow=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='ghost-button submit-button']")));
+			////*[@class='ghost-button submit-button']
+			//js.executeScript("arguments[0].click()", booknow);
+			booknow.click();
+			System.out.println("Element is clickable");
+		} 
+
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	//Enter the firstName
+	public void Enterfirstname() throws AWTException {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement fname=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='FirstName']")));
+		js.executeScript("arguments[0].value='david'",fname);
+		fname.clear();
+		fname.sendKeys("david");
+
+	}
+	//Enter the lastName
+	public void Enterlastname() {
+		JavascriptExecutor js=(JavascriptExecutor)driver;
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement lname=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@id='LastName']")));
+		js.executeScript("arguments[0].value='danken'",lname);
+		lname.clear();
+		lname.sendKeys("danken");
+		//lastname.sendKeys("Test");
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+	}
+	//Enter the DateofBirth
+	public void Enterdateofbirth() throws InterruptedException{
+		try {
+			//JavascriptExecutor js=(JavascriptExecutor)driver;
+			//WebElement dateofbirth=driver.findElement(By.xpath("//*[@id='DateBirth']/span/kendo-dateinput/span/input"));
+			Actions act = new Actions(driver);
+
+			act.sendKeys(Keys.TAB).build().perform();
+			act.sendKeys(Keys.RETURN).build().perform();
+			//waitingtime.shortWait();
+
+			act.sendKeys(Keys.TAB).build().perform();
+			act.sendKeys(Keys.RETURN).build().perform();
+
+			//WebElement date= driver.findElement(By.xpath("//*[@id=\"DateBirth\"]/span/span/span"));
+			WebElement date= driver.findElement(By.xpath("//*[@id='DateBirth']/span/kendo-dateinput/span/input"));
+			date.sendKeys("08201977");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element not clickable");
+		}
+	}
+	//Select the gender
+	public void gender() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement gender=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//label[contains(text(),'Male')]")));
+			//gender.click();
+			js.executeScript("arguments[0].click()", gender);
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+		}
+	}
+	//Enter the address
+	public void address() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement address=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='Street']")));
+			js.executeScript("arguments[0].value='123 Treat Rd'", address);
+			address.clear();
+			address.sendKeys("123 Treat Rd");
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+
+		//Enter the CityName 
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement city=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='City']")));
+			js.executeScript("arguments[0].value='Aurora'", city);
+			city.clear();
+			city.sendKeys("Aurora");
+
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+
+		//Enter the ZipCode
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement ZipCode=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='ZipCode']")));
+			js.executeScript("arguments[0].value='44202'", ZipCode);
+			ZipCode.clear();
+			ZipCode.sendKeys("44202");
+
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+
+	}
+
+	//Enter the EmailAddress
+	public void Email() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement email=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@id='Email']")));
+			js.executeScript("arguments[0].value='uh@uh.com'", email);
+			email.clear();
+			email.sendKeys("uh@uh.org");
+
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+
+	}
+	//Enter the PhoneNumber
+	public void phonenumber() {
+		try {
+			//WebElement phonenumber=driver.findElement(By.xpath("//*[@class='k-textbox']"));
+
+			WebElement phonenumber = new WebDriverWait(driver, 5).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='k-textbox']")));
+
+
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			//driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			js.executeScript("arguments[0].value='330-444-1555'",phonenumber);
+			//phonenumber.sendKeys("330-444-1111");
+			phonenumber.clear();
+			phonenumber.sendKeys("330-444-1555");
+			//3rd way of enter the values 
+			//js.executeScript("document.getElementsByclassName('k-textbox')[0].value='sendkeys'");
+
+			//4th way of enter the values :
+
+			Thread.sleep(3000);
+			Robot robot = new Robot();
+			robot.keyPress(KeyEvent.VK_SPACE);
+			robot.keyRelease(KeyEvent.VK_SPACE);
+			robot.keyPress(KeyEvent.VK_S);
+			robot.keyRelease(KeyEvent.VK_S);
+			robot.keyPress(KeyEvent.VK_E);
+			robot.keyRelease(KeyEvent.VK_E);
+			robot.keyPress(KeyEvent.VK_N);
+			robot.keyRelease(KeyEvent.VK_N);
+			robot.keyPress(KeyEvent.VK_D);
+			robot.keyRelease(KeyEvent.VK_D);
+			// logger.info("phoneNumber entered");
+			System.out.println("Element is clickable");
+
+
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	//Click on the Terms and Conditions
+	public void termsconditions() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement termsconditions=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//body/app-root[1]/main[1]/app-createaccount[1]/form[1]/section[2]/div[1]/div[1]/div[1]/label[1]/label[1]")));
+			js.executeScript("arguments[0].click()", termsconditions);
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	
+	//Click on the Continue button
+	public void Continue() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement Continue=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[(text()='Continue')]")));
+			js.executeScript("arguments[0].click()", Continue);
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	//Enter the providerName
+	public void providerinfo() throws InterruptedException {
+		try {
+			//JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 15);
+			WebElement  providername = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/app-root/main/app-createaccount/section[3]/div/div[1]/div/div/kendo-autocomplete/kendo-searchbar/input")));
+		
+
+			//WebElement  providername = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("")));
+			providername.sendKeys("A");
+			//providername.sendKeys(Keys.TAB);
+			
+			//providername.sendKeys(Keys.ENTER);
+			
+			//WebElement  providername1 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[(text()='Arnob Jacob')]")));
+			//js.executeScript("arguments[0].click()", providername1 );
+			
+			Thread.sleep(5000);
+//List<WebElement>
+			
+		List<WebElement> autoSuggest= driver.findElements(By
+				.xpath("/html/body/app-root/main/app-createaccount/section[3]/div/div[1]/div/div/kendo-autocomplete"));
+			
+			
+			// verify the size of the list
+			
+			
+			System.out.println("Size of the AutoSuggets is = " + autoSuggest.size());
+			// print the auto suggest
+			for (WebElement a : autoSuggest)
+			System.out.println("Values are = " + a.getText());
+			// suppose now you want to click on 3rd auto suggest then simply do like this
+			
+			Thread.sleep(2000);
+			 autoSuggest.get(0).click();
+			 providername.sendKeys(Keys.ENTER); 
+			
+
+		}
+
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+		}
+		
+	}
+
+	//Enter the ProviderPhone
+	public void providerphone() throws InterruptedException, AWTException {
+		Thread.sleep(5000);
+		try {
+			//WebElement phonenumber=driver.findElement(By.xpath("//*[@class='k-textbox']"));
+
+			WebElement phonenumber = new WebDriverWait(driver, 10).until(ExpectedConditions.elementToBeClickable(By.xpath("//*[@class='k-textbox']")));
+
+
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			//driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+			js.executeScript("arguments[0].value='330-444-1111'",phonenumber);
+			//phonenumber.sendKeys("330-444-1111");
+			phonenumber.clear();
+			phonenumber.sendKeys("330-444-1111");
+
+			//3rd way of enter the values 
+			//js.executeScript("document.getElementsByclassName('k-textbox')[0].value='sendkeys'");
+
+			//4th way of enter the values :
+
+			Thread.sleep(3000);
+			Robot robot = new Robot();
+			robot.keyPress(KeyEvent.VK_SPACE);
+			robot.keyRelease(KeyEvent.VK_SPACE);
+			robot.keyPress(KeyEvent.VK_S);
+			robot.keyRelease(KeyEvent.VK_S);
+			robot.keyPress(KeyEvent.VK_E);
+			robot.keyRelease(KeyEvent.VK_E);
+			robot.keyPress(KeyEvent.VK_N);
+			robot.keyRelease(KeyEvent.VK_N);
+			robot.keyPress(KeyEvent.VK_D);
+			robot.keyRelease(KeyEvent.VK_D);
+			// logger.info("phoneNumber entered");
+			System.out.println("Element is clickable");
+			//logger.info("Entered providers phoneNumber");
+
+
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	//Click on the Continue button
+	public void continuebtn() {
+		try {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 5);
+			WebElement continuebtn=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[(text()='Continue')]")));
+			js.executeScript("arguments[0].click()", continuebtn);
+			//continuebtn.click();
+			//logger.info("Click on the continue button");
+			System.out.println("Element is clickable");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Element is not clickable");
+
+		}
+	}
+	
+	//Skip on the insurance button
+	public void Skipinsurancepage() {
+		WebDriverWait wait = new WebDriverWait(driver, 10);
+		WebElement Skipinsurance=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/app-root/main/app-experian/section[3]/div/div/div/div/p")));
+		Skipinsurance.click();
+
+
+	}
+	
+		//Click on the Confirm appointment button
+		public void confirmapt() throws InterruptedException {
+			JavascriptExecutor js=(JavascriptExecutor)driver;
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement Confirmapt=wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Confirm Appointment')]")));
+			Actions action = new Actions(driver);
+			action.moveToElement(Confirmapt);
+			Thread.sleep(5000);
+			js.executeScript("window.scrollTo(0," + Confirmapt.getLocation().y + ")"); 
+			js.executeScript("arguments[0].click()", Confirmapt);
+			//logger.info("Appointment scheduled successfully");
+		}
+	 
+}
+
+
+package com.Mammography.TestCases;
+
+import java.awt.AWTException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+import com.Radiologymammogram.BaseClass;
+import com.Radiologymammogram.UltrasoundGuestcheckout;
+import com.aventstack.extentreports.ExtentTest;
+
+/**
+ * @author vnampel1
+ *
+ */
+@Listeners(com.Radiologymammogram.CustomListeners.class)
+public class UltrasoundwithGuestcheckout extends BaseClass{
+	private static Logger logger = LogManager.getLogger(Mammographylogin.class);
+
+	@Test
+	public void Verifyvaliddropdown() throws InterruptedException, AWTException {
+
+
+		driver.get("http://qademo.uhhospitals.org/radiology-scheduling");
+		driver.manage().window().maximize();
+		driver.manage().deleteAllCookies();
+		logger.info("Url opened successfully");
+		ExtentTest test =extent.createTest("URL entered successfully");
+		test.info("URL is loaded");
+		test.pass("URL opened successfully");
+
+		UltrasoundGuestcheckout ultra = new UltrasoundGuestcheckout(driver);
+		ultra.whoschedulingfor();
+		logger.info("Myself option selected successfully");
+		ExtentTest test1 =extent.createTest("Selected myself option from dropdown");
+		test1.info("Myself selected successfully");
+		test1.pass("Myself selected successfully");
+
+		ultra.Typeofultrasoundappt();
+		logger.info("Ultrasound option selected");
+		ExtentTest test2 =extent.createTest("Mammography selected from dropdown");
+		test2.info("Ultrasound selected from dropdown");
+		test2.pass("Ultrasound selected from dropdown");
+	
+		ultra.Typeofservice();
+		logger.info("Ultrasound Thyroid option selected successfully");
+		ExtentTest test3 =extent.createTest("Ultrasound Thyroid option selected successfully");
+		test3.info("Ultrasound Thyroid option selected successfully");
+		test3.pass("Ultrasound Thyroid option selected successfully");
+		
+		ultra.order();
+		logger.info("Select yes for order");
+		ExtentTest test4 =extent.createTest("Selected yes for order");
+		test4.info("Selected yes for order");
+		test4.pass("Selected yes for order");
+
+		ultra.Clickageband();
+		logger.info("Click on the No for under 18 button");
+		ExtentTest test5 =extent.createTest("Selected NO for under 18 years");
+		test5.info("Selected NO for under 35 years");
+		test5.pass("Selected NO for under 35 years");
+		
+		ultra.Seemoretimes();
+		logger.info("Click on the seemoretimeslots option");
+		ExtentTest test6 =extent.createTest("Selected the seemoretimeslots option");
+		test6.info("Selected the seemoretimeslots option");
+		test6.pass("Selected the seemoretimeslots option");
+
+		logger.info("selected the available time slots");
+		ExtentTest test7 =extent.createTest("selected the available time slots successfully");
+		test7.info("selected the available time slots successfully");
+		test7.pass("selected the available time slots successfully");
+
+		ultra.checkoutasguest();
+		logger.info("Click on the Book now for guest checkout");
+		ExtentTest test8 =extent.createTest("selected the guest checkout option successfully");
+		test8.info("selected the guest checkout option successfully");
+		test8.pass("selected the guest checkout option successfully");
+
+		ultra.Enterfirstname();
+		logger.info("Entered the firstName");
+		ExtentTest test9 =extent.createTest("FirstName entered successfully");
+		test9.info("FirstName entered successfully");
+		test9.pass("FirstName entered successfully");
+
+		ultra.Enterlastname();
+		logger.info("Entered the LastName");
+		ExtentTest test10 =extent.createTest("LastName entered successfully");
+		test10.info("LastName entered successfully");
+		test10.pass("LastName entered successfully");
+
+		ultra.Enterdateofbirth();
+		logger.info("Entered the date of birth");
+		ExtentTest test11 =extent.createTest("Date of birth entered successfully");
+		test11.info("Date of birth entered successfully");
+		test11.pass("Date of birth entered successfully");
+
+		ultra.gender();
+		logger.info("Selected the Gender");
+		ExtentTest test12 =extent.createTest("Gender selected successfully");
+		test12.info("Gender selected successfully");
+		test12.pass("Gender selected successfully");
+
+		ultra.address();
+		logger.info("Entered the Address");
+		ExtentTest test13 =extent.createTest("Address entered successfully");
+		test13.info("Address entered successfully");
+		test13.pass("Address entered successfully");
+
+		ultra.Email();
+		logger.info("Entered the email address");
+		ExtentTest test14 =extent.createTest("Email address entered successfully");
+		test14.info("Email address entered successfully");
+		test14.pass("Email address entered successfully");
+
+		ultra.phonenumber();
+		logger.info("Entered the phoneNumber");
+		ExtentTest test15 =extent.createTest("Entered the phoneNumber successfully");
+		test15.info("Entered the phoneNumber successfully");
+		test15.pass("Entered the phoneNumber successfully");
+
+		ultra.termsconditions();
+		logger.info("Clicked on the Terms and Condition");
+		ExtentTest test16=extent.createTest("Clicked on the Terms and Condition successfully");
+		test16.info("Clicked on the Terms and Condition successfully");
+		test16.pass("Clicked on the Terms and Condition successfully");
+
+		ultra.Continue();
+		logger.info("Clicked on the Continue");
+		ExtentTest test17=extent.createTest("Clicked on the Continue successfully");
+		test17.info("Clicked on the Continue successfully");
+		test17.pass("Clicked on the Continue successfully");
+
+		ultra.providerinfo();
+		logger.info("Provider name entered successfully");
+		ExtentTest test18 =extent.createTest("Provider name entered successfully");
+		test18.info("Provider name entered successfully");
+		test18.pass("Provider name entered successfully");
+
+		ultra.providerphone();
+		logger.info("phoneNumber entered");
+		ExtentTest test19 =extent.createTest("Provider's phoneNumber entered successfully");
+		test19.info("Provider's phoneNumber entered successfully");
+		test19.pass("Provider's phoneNumber entered successfully");
+
+		ultra.continuebtn();
+		logger.info("Click on the continue button");
+		ExtentTest test20=extent.createTest("Provider name and phonenumber entered successfully");
+		test20.info("Provider name and phonenumber entered successfully");
+		test20.pass("Provider name and phonenumber entered successfully");
+
+		ultra.Skipinsurancepage();
+		logger.info("Skipped the insurance");
+		ExtentTest test21=extent.createTest("Insurance skipped successfully");
+		test21.info("Insurance skipped successfully");
+		test21.pass("Insurance skipped successfully");
+
+		
+		ultra.confirmapt();
+		logger.info("Appointment confirmed successfully");
+		ExtentTest test22=extent.createTest("Appointment confirmed successfully");
+		test22.info("Appointment confirmed successfully");
+		test22.pass("Appointment confirmed successfully");
+
+	}
+
+
+}
+
+
+package com.Radiologymammogram;
+
+import java.io.File;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+
+public class CustomListeners extends BaseClass implements ITestListener {
+String filePath = "C:\\TFS\\UH\\Mobile\\UHNow\\Trunk\\Selenium\\Radiology2.0.Selenium\\Screenshots.png";
+	
+	public void onTestStart(ITestResult result) {
+		System.out.println("New Test Started" +result.getName());
+		
+	}
+
+	public void onTestSuccess(ITestResult result) {
+		System.out.println("New Test Success" +result.getName()); 
+		
+	} 
+
+	
+	public void onTestFailure(ITestResult result) {
+		
+		System.out.println("***** Error "+result.getName()+" test has failed *****");
+    	String methodName=result.getName().toString().trim();
+        ITestContext context = result.getTestContext();
+     context.getAttribute("driver");
+    
+			try {
+				takeScreenShot(methodName, driver);
+			} catch (Throwable e) {
+				
+				e.printStackTrace();
+			}
+    	
+	}
+		
+    
+	  public void takeScreenShot(String methodName, WebDriver driver) throws Throwable  {
+	    	 File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+	         //The below method will save the screen shot in d drive with test method name 
+	            try {
+					FileUtils.copyFile(scrFile, new File(filePath+methodName+".png"));
+					System.out.println("Screenshot Attached");
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+    
+				}
+
+	public void onTestSkipped(ITestResult result) {
+	
+		
+	}
+
+	public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		
+		
+	}
+
+
+	public void onStart(ITestContext context) {
+		
+		
+	}
+
+	public void onFinish(ITestContext context) {
+		
+		
+	}
+	
+
+}
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="com.Radiologymammogram.CustomListeners" />
+	</listeners>
+	<test name="Test">
+		<parameter name="browserName" value="chrome"></parameter>
+		<classes>
+			<class name="com.Radiologymammogram.UltrasoundGuestcheckout" />
+			<class name="com.Mammography.TestCases.UltrasoundwithGuestcheckout" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
+
+
+
+
+
